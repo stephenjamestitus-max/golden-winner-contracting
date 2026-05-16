@@ -1,49 +1,66 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ThreeCrane from "./ThreeCrane";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const VIDEO_URL =
+  "https://videos.pexels.com/video-files/28823329/12513254_2560_1440_30fps.mp4";
+
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Entrance animations
       gsap.from(titleRef.current, {
         y: 60,
         opacity: 0,
         duration: 1.4,
         ease: "power4.out",
-        delay: 0.3,
+        delay: 0.4,
       });
       gsap.from(subtitleRef.current, {
         y: 30,
         opacity: 0,
         duration: 1.2,
         ease: "power3.out",
-        delay: 0.8,
+        delay: 0.9,
       });
       gsap.from(scrollRef.current, {
         opacity: 0,
         duration: 1,
-        delay: 1.6,
+        delay: 1.7,
       });
 
-      // Parallax on scroll
-      gsap.to(overlayRef.current, {
-        yPercent: 30,
+      // Video parallax — moves at 0.4× scroll speed as section exits
+      gsap.to(videoWrapRef.current, {
+        y: "40%",
         ease: "none",
         scrollTrigger: {
-          trigger: "body",
+          trigger: sectionRef.current,
           start: "top top",
-          end: "20% top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // Content fades up slightly slower
+      gsap.to(contentRef.current, {
+        y: "20%",
+        opacity: 0.3,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "60% top",
           scrub: true,
         },
       });
@@ -55,28 +72,42 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      ref={sectionRef}
       className="relative w-full h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80"
-          alt="Construction site background"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
+      {/* Video background — oversized so parallax never shows gaps */}
+      <div
+        ref={videoWrapRef}
+        className="absolute inset-0 scale-[1.15] will-change-transform"
+        style={{ zIndex: 0 }}
+      >
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          src={VIDEO_URL}
+          className="w-full h-full object-cover object-center"
+          aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#0A0A0A]" />
       </div>
 
-      {/* Three.js crane — fixed, behind everything */}
-      <ThreeCrane />
+      {/* Dark overlay */}
+      <div
+        className="absolute inset-0 bg-black/50"
+        style={{ zIndex: 1 }}
+      />
+      {/* Bottom fade to site bg */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent to-[#0A0A0A]"
+        style={{ zIndex: 2 }}
+      />
 
       {/* Hero content */}
       <div
-        ref={overlayRef}
-        className="relative z-10 text-center px-6 max-w-6xl mx-auto"
+        ref={contentRef}
+        className="relative text-center px-6 max-w-6xl mx-auto"
+        style={{ zIndex: 10 }}
       >
         <p className="text-[#C9943A] font-heading tracking-[0.3em] text-lg mb-4 uppercase">
           Est. 2011 · Dubai, UAE
@@ -110,9 +141,12 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div
         ref={scrollRef}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        style={{ zIndex: 10 }}
       >
-        <span className="text-[#C9943A]/60 text-xs tracking-[0.3em] uppercase">Scroll</span>
+        <span className="text-[#C9943A]/60 text-xs tracking-[0.3em] uppercase">
+          Scroll
+        </span>
         <div className="w-px h-14 bg-gradient-to-b from-[#C9943A]/60 to-transparent animate-pulse" />
       </div>
     </section>
