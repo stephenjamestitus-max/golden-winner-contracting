@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0A0A0A;
+  --color-brown: #6B2D1A;
+  --color-sand: #D4C4A8;
+  --color-gold: #C9943A;
+  --color-white: #FAFAFA;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-white);
+  --font-heading: 'Bebas Neue', cursive;
+  --font-body: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles this */
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-white);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-heading {
+  font-family: 'Bebas Neue', cursive;
+}
+
+.text-gold { color: var(--color-gold); }
+.text-sand { color: var(--color-sand); }
+.text-brown { color: var(--color-brown); }
+.bg-gold { background-color: var(--color-gold); }
+.bg-brown { background-color: var(--color-brown); }
+.bg-sand { background-color: var(--color-sand); }
+
+/* Gold shimmer button */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.btn-shimmer {
+  background: linear-gradient(90deg, #C9943A 0%, #f5c842 40%, #C9943A 60%, #a87728 100%);
+  background-size: 200% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* Blueprint grid */
+.blueprint-bg {
+  background-color: #0a1628;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.08) 1px, transparent 1px),
+    linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* Marquee */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.marquee-left { animation: marquee-left 30s linear infinite; }
+.marquee-right { animation: marquee-right 35s linear infinite; }
+
+/* Stat counter */
+.stat-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--color-gold);
+}
+
+/* Timeline */
+.timeline-line {
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #C9943A, transparent);
+}
+
+/* ISO badge pulse */
+@keyframes iso-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,148,58,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(201,148,58,0); }
+}
+.iso-badge { animation: iso-glow 2.5s ease-in-out infinite; }
