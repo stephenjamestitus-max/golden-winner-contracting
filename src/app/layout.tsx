@@ -2,23 +2,26 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Golden Winner Contracting LLC | Built on Trust. Delivered with Precision.",
+  title: "Golden Winner Contracting LLC | Construction & MEP Services Dubai",
   description:
-    "Golden Winner Contracting LLC, established in 2011 in Dubai UAE, is a multidisciplinary construction company specializing in MEP systems, HVAC, electrical works, and infrastructure maintenance. ISO 9001, 14001, 45001 certified.",
+    "UAE trusted multidisciplinary contractor since 2011. MEP, fit-out, renovation, structural works. ISO 9001/14001/45001 certified. Serving Al Futtaim, DAMAC, Tecom and 45+ major clients.",
   keywords: [
     "construction Dubai",
     "MEP contractor UAE",
+    "fit-out works Dubai",
+    "renovation contractor Sharjah",
+    "column jacketing UAE",
     "HVAC Dubai",
-    "electrical contractor",
-    "renovation Dubai",
-    "fit-out contractor",
-    "ISO certified contractor",
+    "electrical contractor UAE",
+    "ISO certified contractor Dubai",
   ],
   openGraph: {
-    title: "Golden Winner Contracting LLC",
-    description: "Built on Trust. Delivered with Precision.",
+    title: "Golden Winner Contracting LLC | Construction & MEP Services Dubai",
+    description:
+      "UAE trusted multidisciplinary contractor since 2011. MEP, fit-out, renovation, structural works. ISO 9001/14001/45001 certified.",
     type: "website",
     locale: "en_AE",
+    url: "https://golden-winner-contracting.vercel.app",
   },
 };
 

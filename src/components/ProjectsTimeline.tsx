@@ -152,7 +152,15 @@ const PROJECTS: Project[] = [
   },
 ];
 
-function PhotoGrid({ photos, label }: { photos: NonNullable<Project["photos"]>; label?: string }) {
+function PhotoGrid({
+  photos,
+  label,
+  project,
+}: {
+  photos: NonNullable<Project["photos"]>;
+  label?: string;
+  project: Project;
+}) {
   const is3 = photos.length === 3;
 
   return (
@@ -170,6 +178,7 @@ function PhotoGrid({ photos, label }: { photos: NonNullable<Project["photos"]>; 
               src={photos[0].src}
               alt={label ?? "Project photo"}
               fill
+              loading="lazy"
               sizes="(max-width: 768px) 100vw, 400px"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -181,6 +190,7 @@ function PhotoGrid({ photos, label }: { photos: NonNullable<Project["photos"]>; 
                   src={p.src}
                   alt={label ?? "Project photo"}
                   fill
+                  loading="lazy"
                   sizes="(max-width: 768px) 50vw, 200px"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -197,6 +207,7 @@ function PhotoGrid({ photos, label }: { photos: NonNullable<Project["photos"]>; 
                 src={p.src}
                 alt={label ?? "Project photo"}
                 fill
+                loading="lazy"
                 sizes="(max-width: 768px) 50vw, 200px"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -204,6 +215,21 @@ function PhotoGrid({ photos, label }: { photos: NonNullable<Project["photos"]>; 
           ))}
         </div>
       )}
+
+      {/* Caption row — project name · type · client */}
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+        <span className="text-[#D4C4A8]/50 text-[10px] tracking-[0.18em] uppercase font-light">
+          {project.name}
+        </span>
+        <span className="text-[#C9943A]/30 text-[9px]">·</span>
+        <span className="text-[#D4C4A8]/35 text-[10px] tracking-[0.18em] uppercase font-light">
+          {project.type}
+        </span>
+        <span className="text-[#C9943A]/30 text-[9px]">·</span>
+        <span className="text-[#D4C4A8]/35 text-[10px] tracking-[0.18em] uppercase font-light">
+          {project.client}
+        </span>
+      </div>
     </div>
   );
 }
@@ -331,7 +357,7 @@ export default function ProjectsTimeline() {
                         <div className="mt-4 w-10 h-px bg-[#C9943A]/30" />
                       </div>
                       {/* Photos */}
-                      <PhotoGrid photos={project.photos} label={project.photoLabel} />
+                      <PhotoGrid photos={project.photos} label={project.photoLabel} project={project} />
                     </div>
                   </div>
                 );
