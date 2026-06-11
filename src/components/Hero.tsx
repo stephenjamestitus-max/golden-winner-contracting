@@ -100,6 +100,8 @@ export default function Hero() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ transform: "scale(1.1)" }}
         >
+          {/* Self-hosted first; remote source is the fallback if it's absent */}
+          <source src="/video/hero.mp4" type="video/mp4" />
           <source
             src="https://videos.pexels.com/video-files/28823329/12513254_2560_1440_30fps.mp4"
             type="video/mp4"
@@ -175,7 +177,7 @@ export default function Hero() {
         {/* Stats strip */}
         <div
           ref={statsRef}
-          className="mt-10 md:mt-12 mx-auto max-w-3xl border-y border-[#C9943A]/20 bg-black/25 backdrop-blur-sm grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#C9943A]/15"
+          className="mt-10 md:mt-12 mx-auto max-w-3xl border-y border-[#C9943A]/20 bg-black/40 grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#C9943A]/15"
         >
           {HERO_STATS.map((s) => (
             <div key={s.label} className="py-3.5 px-2 text-center">
