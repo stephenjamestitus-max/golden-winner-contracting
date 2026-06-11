@@ -93,7 +93,7 @@ export default function Contact() {
       {/* Background — crane at sunset */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=1920&q=70"
+          src="/images/contact/crane-sunset.jpg"
           alt="Crane at sunset"
           fill
           className="object-cover object-center opacity-20"

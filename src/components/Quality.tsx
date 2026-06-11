@@ -76,12 +76,12 @@ export default function Quality() {
         <AnimatePresence mode="wait">
           <motion.span
             key={`wm-${activePanel}`}
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             aria-hidden="true"
-            className="absolute right-[-2%] bottom-[-6%] font-heading text-outline text-[clamp(14rem,42vw,38rem)] leading-none select-none pointer-events-none"
+            className="absolute right-[-2%] bottom-[-4%] font-heading text-outline text-[clamp(10rem,26vw,20rem)] leading-none select-none pointer-events-none"
           >
             {PANELS[activePanel].number}
           </motion.span>

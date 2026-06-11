@@ -17,7 +17,7 @@ const FLOORS = [
     color: "#4A90D9",
     services: ["Waterproofing", "Block Works", "Curbstone", "Interlock"],
     pipes: false,
-    img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1400&q=70",
+    img: "/images/services/groundworks.jpg",
     alt: "Excavation and groundworks on a construction site",
   },
   {
@@ -29,8 +29,8 @@ const FLOORS = [
     color: "#4A90D9",
     services: ["Shell & Core", "Column Jacketing", "Carbon Wrapping", "Reinstatement"],
     pipes: false,
-    img: "https://images.unsplash.com/photo-1541976590-713941681591?w=1400&q=70",
-    alt: "Reinforced concrete structure rising under a tower crane",
+    img: "/images/services/structure.jpg",
+    alt: "Concrete pouring into formwork on a structural frame",
   },
   {
     id: "floor2",
@@ -41,8 +41,8 @@ const FLOORS = [
     color: "#4ACDDD",
     services: ["MEP Works", "HVAC", "Electrical", "Plumbing"],
     pipes: true,
-    img: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1400&q=70",
-    alt: "Industrial pipework and mechanical services",
+    img: "/images/services/mep.jpg",
+    alt: "HVAC ducting and MEP services installed above ceiling level",
   },
   {
     id: "floor3",
@@ -53,8 +53,8 @@ const FLOORS = [
     color: "#4A90D9",
     services: ["Fit-Out", "Dry Wall", "Partitions", "False Ceilings", "Carpentry"],
     pipes: false,
-    img: "https://images.unsplash.com/photo-1503328427499-d92d1ac3d174?w=1400&q=70",
-    alt: "Tradesman carrying out interior fit-out works",
+    img: "/images/services/fitout.jpg",
+    alt: "Worker fixing drywall ceiling during interior fit-out",
   },
   {
     id: "floor4",
@@ -65,7 +65,7 @@ const FLOORS = [
     color: "#4A90D9",
     services: ["Plastering", "Painting", "Wall & Floor Tiling", "Epoxy Floor"],
     pipes: false,
-    img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=1400&q=70",
+    img: "/images/services/finishes.jpg",
     alt: "Painter rolling fresh paint onto an interior wall",
   },
   {
@@ -77,15 +77,16 @@ const FLOORS = [
     color: "#6B8CBA",
     services: ["Cladding", "Landscaping", "Insulation", "Refurbishment", "Renovation"],
     pipes: false,
-    img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1400&q=70",
-    alt: "Completed glass towers against a golden sky",
+    img: "/images/services/envelope.jpg",
+    alt: "Completed modern towers in Dubai at golden hour",
   },
 ];
 
 const FLOOR_TICKS = ["B", "G", "01", "02", "03", "R"];
 
-// Total section height — each floor gets one viewport of scroll
-const SECTION_VH = (FLOORS.length + 1.5) * 100;
+// Total section height — each floor gets just under one viewport of scroll,
+// so the pin never overstays its welcome
+const SECTION_VH = (FLOORS.length + 0.5) * 100;
 
 export default function XRayBuilding() {
   const sectionRef  = useRef<HTMLElement>(null);
@@ -175,27 +176,17 @@ export default function XRayBuilding() {
     >
       <div className="sticky top-0 h-screen flex flex-col items-center overflow-hidden blueprint-bg">
 
-        {/* ── Atmospheric photo backdrop — crossfades with the active phase ── */}
+        {/* ── Phase glow — a cheap tinted backdrop that warms as the build rises ── */}
         <div className="absolute inset-0" aria-hidden="true">
-          {FLOORS.map((f, i) => (
-            <div
-              key={f.id}
-              className="absolute inset-0 transition-opacity duration-[1400ms] ease-out"
-              style={{ opacity: i === displayFloor && activeFloor >= 0 ? 0.16 : 0 }}
-            >
-              <Image
-                src={f.img}
-                alt=""
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
-          {/* Vignette to keep the blueprint legible */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,rgba(7,13,26,0.9)_100%)]" />
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0a1628] to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1628] to-transparent" />
+          <div
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{
+              opacity: activeFloor >= 0 ? 0.5 + activeFloor * 0.08 : 0.25,
+              background:
+                "radial-gradient(ellipse 80% 60% at 70% 45%, rgba(201,148,58,0.13) 0%, transparent 65%)",
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(7,13,26,0.7)_100%)]" />
         </div>
 
         {/* ── Content ── */}
@@ -398,6 +389,7 @@ export default function XRayBuilding() {
                       src={f.img}
                       alt={f.alt}
                       fill
+                      priority={i === 0}
                       sizes="(max-width: 768px) 100vw, 560px"
                       className={`object-cover ${i === displayFloor ? "kenburns-active" : ""}`}
                     />
@@ -412,7 +404,7 @@ export default function XRayBuilding() {
                 <div className="absolute bottom-2.5 right-2.5 w-5 h-5 border-b border-r border-[#C9943A]/70" />
 
                 {/* Phase badge */}
-                <div className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center gap-2 bg-black/55 backdrop-blur-sm border border-[#C9943A]/30 rounded-full px-3 py-1.5">
+                <div className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center gap-2 bg-black/70 border border-[#C9943A]/30 rounded-full px-3 py-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C9943A] animate-pulse" />
                   <span className="text-[#C9943A] text-[10px] tracking-[0.25em] uppercase font-mono">
                     Phase {String(displayFloor + 1).padStart(2, "0")} / 0{FLOORS.length}
@@ -434,7 +426,7 @@ export default function XRayBuilding() {
 
                 {/* Intro overlay before construction starts */}
                 {activeFloor === -1 && (
-                  <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3">
+                  <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-3">
                     <span className="text-[#C9943A] text-[11px] tracking-[0.4em] uppercase font-mono animate-pulse">
                       Scroll to break ground
                     </span>
@@ -448,7 +440,7 @@ export default function XRayBuilding() {
                 {floor.services.map((svc, i) => (
                   <span
                     key={svc}
-                    className="inline-flex items-center gap-2 border border-[#C9943A]/30 bg-[#C9943A]/[0.06] backdrop-blur-sm rounded-full px-3 py-1.5 text-[11px] md:text-xs tracking-wider uppercase text-[#D4C4A8]"
+                    className="inline-flex items-center gap-2 border border-[#C9943A]/30 bg-[#101724]/90 rounded-full px-3 py-1.5 text-[11px] md:text-xs tracking-wider uppercase text-[#D4C4A8]"
                     style={{ animation: `chipPop 0.45s cubic-bezier(0.22,1,0.36,1) ${0.08 + i * 0.07}s both` }}
                   >
                     <span className="w-1 h-1 rounded-full bg-[#C9943A] flex-shrink-0" />

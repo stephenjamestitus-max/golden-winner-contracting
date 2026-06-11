@@ -242,8 +242,8 @@ export default function About() {
               className="absolute top-0 left-0 w-[78%] h-[72%] overflow-hidden rounded-sm shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]"
             >
               <Image
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=70"
-                alt="Construction crew working on structural steel"
+                src="/images/about/site-team.jpg"
+                alt="Crews and tower cranes working on a large construction site"
                 fill
                 sizes="(max-width: 768px) 78vw, 540px"
                 className="object-cover hover:scale-105 transition-transform duration-[1.5s]"
@@ -256,8 +256,8 @@ export default function About() {
               className="absolute bottom-2 right-2 w-[52%] h-[48%] overflow-hidden rounded-sm border border-[#C9943A]/40 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.95)]"
             >
               <Image
-                src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=70"
-                alt="Architectural drawings and project planning"
+                src="/images/about/blueprints.jpg"
+                alt="Technical drawings and rolled blueprints"
                 fill
                 sizes="(max-width: 768px) 52vw, 360px"
                 className="object-cover hover:scale-105 transition-transform duration-[1.5s]"

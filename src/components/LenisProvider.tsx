@@ -23,13 +23,29 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
 
     lenis.on("scroll", ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const tick = (time: number) => {
       lenis.raf(time * 1000);
-    });
-
+    };
+    gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
+    // All sections mount client-side (dynamic imports), so the document grows
+    // after Lenis/ScrollTrigger init — recompute limits once everything settles.
+    const refresh = () => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    };
+    if (document.readyState === "complete") {
+      refresh();
+    } else {
+      window.addEventListener("load", refresh);
+    }
+    const settleTimer = setTimeout(refresh, 1500);
+
     return () => {
+      window.removeEventListener("load", refresh);
+      clearTimeout(settleTimer);
+      gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
     };
