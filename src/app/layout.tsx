@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://golden-winner-contracting.vercel.app"),
   title: "Golden Winner Contracting LLC | Construction & MEP Services Dubai",
   description:
     "UAE trusted multidisciplinary contractor since 2011. MEP, fit-out, renovation, structural works. ISO 9001/14001/45001 certified. Serving Al Futtaim, DAMAC, Tecom and 45+ major clients.",
@@ -25,6 +26,10 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0A0A0A",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,6 +39,8 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className="min-h-full bg-[#0A0A0A] text-[#FAFAFA] antialiased overflow-x-hidden">
         {children}
+        {/* Cinematic film grain over the whole page */}
+        <div className="grain" aria-hidden="true" />
       </body>
     </html>
   );

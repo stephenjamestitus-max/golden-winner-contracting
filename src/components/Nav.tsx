@@ -14,11 +14,23 @@ const NAV_LINKS = [
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const ticking = useRef(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 80);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(max > 0 ? Math.min(window.scrollY / max, 1) : 0);
+        ticking.current = false;
+      });
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -35,7 +47,7 @@ export default function Nav() {
       className={clsx(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-400",
         scrolled
-          ? "bg-[#0A0A0A] border-b border-[#C9943A]/40 py-3"
+          ? "bg-[#0A0A0A]/75 backdrop-blur-xl border-b border-[#C9943A]/25 py-3 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.8)]"
           : "bg-transparent py-5"
       )}
     >
@@ -85,7 +97,7 @@ export default function Nav() {
             <button
               key={link.label}
               onClick={() => handleLink(link.href)}
-              className="text-[#D4C4A8]/60 text-sm tracking-widest uppercase hover:text-[#C9943A] transition-colors duration-300"
+              className="nav-link text-[#D4C4A8]/60 text-sm tracking-widest uppercase hover:text-[#C9943A] transition-colors duration-300"
             >
               {link.label}
             </button>
@@ -130,8 +142,13 @@ export default function Nav() {
       </div>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-[#0A0A0A] border-t border-[#C9943A]/20 px-6 py-6 flex flex-col gap-4">
+      <div
+        className={clsx(
+          "md:hidden overflow-hidden transition-all duration-400 ease-out",
+          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="bg-[#0A0A0A]/95 backdrop-blur-xl border-t border-[#C9943A]/20 px-6 py-6 flex flex-col gap-4">
           {NAV_LINKS.map((link) => (
             <button
               key={link.label}
@@ -148,7 +165,15 @@ export default function Nav() {
             Get a Quote
           </button>
         </div>
-      )}
+      </div>
+
+      {/* Scroll progress bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-transparent">
+        <div
+          className="h-full bg-gradient-to-r from-[#9A6B24] via-[#C9943A] to-[#E8C97E]"
+          style={{ width: `${progress * 100}%`, transition: "width 80ms linear" }}
+        />
+      </div>
     </nav>
   );
 }
