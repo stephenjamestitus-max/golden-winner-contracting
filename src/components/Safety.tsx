@@ -116,7 +116,7 @@ export default function Safety() {
             Safety & Compliance
           </span>
           <h2 className="font-heading text-[clamp(3rem,8vw,7rem)] leading-none text-[#FAFAFA] mt-2">
-            Safety <span className="text-[#C9943A]">First</span>,
+            Safety <span className="text-gradient-gold">First</span>,
             <br />
             Always
           </h2>
@@ -142,7 +142,7 @@ export default function Safety() {
               className="relative group"
             >
               {/* Badge card */}
-              <div className="iso-badge border border-[#C9943A]/20 bg-black/60 backdrop-blur-sm p-8 rounded-sm text-center transition-all duration-500 hover:border-[#C9943A]/60 hover:bg-black/80">
+              <div className="iso-badge border border-[#C9943A]/20 bg-black/60 backdrop-blur-sm p-8 rounded-sm text-center transition-all duration-500 hover:border-[#C9943A]/60 hover:bg-black/80 hover:-translate-y-1 hover:shadow-[0_30px_60px_-25px_rgba(201,148,58,0.3)]">
                 {/* Outer ring */}
                 <div
                   className="w-28 h-28 rounded-full border-2 mx-auto mb-6 flex items-center justify-center relative"

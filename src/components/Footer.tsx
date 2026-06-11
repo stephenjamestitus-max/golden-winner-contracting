@@ -19,8 +19,27 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#060606] border-t border-[#C9943A]/40">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+    <footer className="relative bg-[#060606] border-t border-[#C9943A]/40 overflow-hidden">
+      {/* Giant watermark wordmark */}
+      <p
+        aria-hidden="true"
+        className="absolute -bottom-6 left-1/2 -translate-x-1/2 font-heading text-outline text-[clamp(4rem,13vw,12rem)] leading-none whitespace-nowrap select-none pointer-events-none opacity-50"
+      >
+        GOLDEN WINNER
+      </p>
+
+      {/* Back to top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Back to top"
+        className="absolute top-6 right-6 w-10 h-10 border border-[#C9943A]/40 rounded-sm flex items-center justify-center text-[#C9943A] hover:bg-[#C9943A] hover:text-[#0A0A0A] transition-all duration-300 group z-10"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:-translate-y-0.5 transition-transform duration-300">
+          <path d="M7 12V2M7 2L2.5 6.5M7 2l4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-24">
         <div className="grid md:grid-cols-3 gap-12 pb-12 border-b border-[#C9943A]/10">
           {/* Brand column */}
           <div className="md:col-span-1">

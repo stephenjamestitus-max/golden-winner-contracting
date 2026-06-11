@@ -12,6 +12,7 @@ const PANELS = [
   {
     number: "01",
     title: "Contractual\nPrecision",
+    short: "Precision",
     description:
       "Every project is governed by rigorous contract management — clear scope, defined deliverables, and transparent milestones that protect both client and contractor at every stage.",
     icon: "◈",
@@ -19,6 +20,7 @@ const PANELS = [
   {
     number: "02",
     title: "Industry Best\nPractice",
+    short: "Best Practice",
     description:
       "Our teams are trained to the highest international standards, drawing from decades of collective expertise across MEP, structural, and fit-out domains.",
     icon: "◇",
@@ -26,6 +28,7 @@ const PANELS = [
   {
     number: "03",
     title: "Regulatory\nCompliance",
+    short: "Compliance",
     description:
       "Full adherence to Dubai Municipality, DEWA, and UAE Federal standards. We carry every permit, certification, and approval your project demands.",
     icon: "◉",
@@ -33,6 +36,7 @@ const PANELS = [
   {
     number: "04",
     title: "Stakeholder\nSatisfaction",
+    short: "Satisfaction",
     description:
       "From project inception to handover, we maintain open communication, regular reporting, and post-completion support that earns lasting partnerships.",
     icon: "◎",
@@ -67,6 +71,22 @@ export default function Quality() {
       className="relative"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-[#0A0A0A]">
+
+        {/* Giant watermark number behind everything */}
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={`wm-${activePanel}`}
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            aria-hidden="true"
+            className="absolute right-[-2%] bottom-[-6%] font-heading text-outline text-[clamp(14rem,42vw,38rem)] leading-none select-none pointer-events-none"
+          >
+            {PANELS[activePanel].number}
+          </motion.span>
+        </AnimatePresence>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={activePanel}
@@ -76,9 +96,9 @@ export default function Quality() {
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="h-screen flex items-center justify-center px-8"
           >
-            <div className="max-w-5xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center">
+            <div className="max-w-5xl mx-auto w-full grid md:grid-cols-2 gap-10 md:gap-16 items-center">
               {/* Left — number + icon */}
-              <div className="flex flex-col">
+              <div className="hidden md:flex flex-col">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -88,9 +108,9 @@ export default function Quality() {
                   {PANELS[activePanel].number}
                 </motion.div>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-[#C9943A] text-5xl -mt-16 ml-4"
                 >
                   {PANELS[activePanel].icon}
@@ -162,6 +182,33 @@ export default function Quality() {
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {/* Pillar rail — desktop, left edge */}
+        <div className="hidden lg:flex absolute left-10 top-1/2 -translate-y-1/2 flex-col gap-7">
+          {PANELS.map((p, i) => (
+            <div key={p.number} className="flex items-center gap-3">
+              <span
+                className="font-mono text-[10px] transition-colors duration-300"
+                style={{ color: i === activePanel ? "#C9943A" : "rgba(212,196,168,0.25)" }}
+              >
+                {p.number}
+              </span>
+              <span
+                className="h-px transition-all duration-500"
+                style={{
+                  width: i === activePanel ? "2.5rem" : "1rem",
+                  backgroundColor: i === activePanel ? "#C9943A" : "rgba(212,196,168,0.15)",
+                }}
+              />
+              <span
+                className="text-[10px] tracking-[0.25em] uppercase transition-colors duration-300"
+                style={{ color: i === activePanel ? "#D4C4A8" : "rgba(212,196,168,0.25)" }}
+              >
+                {p.short}
+              </span>
+            </div>
+          ))}
+        </div>
 
         {/* Section label */}
         <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center">

@@ -111,7 +111,7 @@ export default function Contact() {
           <h2 className="font-heading text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#FAFAFA] mt-2">
             Let&apos;s Build
             <br />
-            <span className="text-[#C9943A]">Together</span>
+            <span className="text-gradient-gold">Together</span>
           </h2>
         </div>
 
@@ -300,11 +300,6 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* Footer bar */}
-      <div className="relative z-10 mt-24 pt-8 border-t border-[#C9943A]/10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[#D4C4A8]/30 text-xs">
-        <p>© {new Date().getFullYear()} Golden Winner Contracting LLC. All rights reserved.</p>
-        <p className="tracking-widest uppercase">Dubai, UAE · Est. 2011</p>
-      </div>
     </section>
   );
 }

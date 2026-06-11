@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -152,6 +152,45 @@ const PROJECTS: Project[] = [
   },
 ];
 
+/** Project photo with graceful fallback — if the file is missing the cell
+ *  renders as an intentional-looking blueprint tile instead of a broken image. */
+function ProjectImage({
+  src,
+  alt,
+  sizes,
+  fallbackLabel,
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  fallbackLabel: string;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#10141d] to-[#0A0A0A]">
+        <div className="absolute inset-0 opacity-[0.07] blueprint-bg" />
+        <span className="relative text-[#C9943A]/50 text-[9px] font-mono tracking-[0.25em] uppercase text-center px-2">
+          {fallbackLabel}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      loading="lazy"
+      sizes={sizes}
+      onError={() => setFailed(true)}
+      className="object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  );
+}
+
 function PhotoGrid({
   photos,
   label,
@@ -174,25 +213,21 @@ function PhotoGrid({
         // 3-photo: full-width top + two below
         <div className="grid grid-rows-2 gap-1.5" style={{ height: "220px" }}>
           <div className="relative overflow-hidden rounded-sm group">
-            <Image
+            <ProjectImage
               src={photos[0].src}
               alt={label ?? "Project photo"}
-              fill
-              loading="lazy"
               sizes="(max-width: 768px) 100vw, 400px"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              fallbackLabel={project.type}
             />
           </div>
           <div className="grid grid-cols-2 gap-1.5">
             {photos.slice(1).map((p, i) => (
               <div key={i} className="relative overflow-hidden rounded-sm group">
-                <Image
+                <ProjectImage
                   src={p.src}
                   alt={label ?? "Project photo"}
-                  fill
-                  loading="lazy"
                   sizes="(max-width: 768px) 50vw, 200px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  fallbackLabel={project.type}
                 />
               </div>
             ))}
@@ -203,13 +238,11 @@ function PhotoGrid({
         <div className="grid grid-cols-2 gap-1.5" style={{ height: "220px" }}>
           {photos.map((p, i) => (
             <div key={i} className="relative overflow-hidden rounded-sm group">
-              <Image
+              <ProjectImage
                 src={p.src}
                 alt={label ?? "Project photo"}
-                fill
-                loading="lazy"
                 sizes="(max-width: 768px) 50vw, 200px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                fallbackLabel={project.type}
               />
             </div>
           ))}
@@ -237,10 +270,10 @@ function PhotoGrid({
 function ProjectInfo({ project, align }: { project: Project; align: "left" | "right" }) {
   const isRight = align === "right";
   return (
-    <div className={`${isRight ? "text-right" : "text-left"}`}>
+    <div className={`text-left ${isRight ? "md:text-right" : ""}`}>
       <div
-        className={`flex items-center gap-2 mb-2 ${
-          isRight ? "justify-end" : "justify-start"
+        className={`flex items-center gap-2 mb-2 justify-start ${
+          isRight ? "md:justify-end" : ""
         }`}
       >
         <span className="text-[#C9943A]/60 text-xs font-mono tracking-wider">
@@ -254,7 +287,7 @@ function ProjectInfo({ project, align }: { project: Project; align: "left" | "ri
       <h3 className="text-[#FAFAFA] font-medium text-sm leading-snug group-hover:text-[#C9943A] transition-colors duration-300">
         {project.name}
       </h3>
-      <p className="font-heading text-2xl text-[#C9943A] mt-1">{project.value}</p>
+      <p className="font-heading text-2xl text-gradient-gold mt-1">{project.value}</p>
       <p className="text-[#D4C4A8]/40 text-xs mt-1 uppercase tracking-wider">
         {project.client}
       </p>
@@ -320,19 +353,18 @@ export default function ProjectsTimeline() {
             Our Portfolio
           </span>
           <h2 className="font-heading text-[clamp(3rem,7vw,6rem)] leading-none text-[#FAFAFA] mt-2">
-            Project <span className="text-[#C9943A]">Timeline</span>
+            Project <span className="text-gradient-gold">Timeline</span>
           </h2>
           <p className="mt-4 text-[#D4C4A8]/50 text-sm">
             AED 40M+ in completed projects across Dubai
           </p>
         </div>
 
-        {/* Timeline */}
+        {/* Timeline — spine sits left on mobile, centre on md+ */}
         <div className="relative">
-          {/* Center spine */}
           <div
             ref={lineRef}
-            className="timeline-line absolute left-1/2 -translate-x-1/2 top-0 bottom-0"
+            className="timeline-line absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0"
           />
 
           <div className="space-y-8">
@@ -346,11 +378,11 @@ export default function ProjectsTimeline() {
                     className="relative w-full"
                   >
                     {/* Dot */}
-                    <div className="absolute left-1/2 -translate-x-1/2 -top-2 w-4 h-4 rounded-full border-2 border-[#C9943A] bg-[#0A0A0A] z-10 flex items-center justify-center">
+                    <div className="absolute left-4 md:left-1/2 -translate-x-1/2 -top-2 w-4 h-4 rounded-full border-2 border-[#C9943A] bg-[#0A0A0A] z-10 flex items-center justify-center">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#C9943A]" />
                     </div>
 
-                    <div className="group mt-4 border border-[#C9943A]/25 bg-black/50 rounded-sm p-5 grid md:grid-cols-2 gap-5 hover:border-[#C9943A]/50 transition-all duration-300">
+                    <div className="group mt-4 ml-10 md:ml-0 border border-[#C9943A]/25 bg-black/50 rounded-sm p-5 grid md:grid-cols-2 gap-5 hover:border-[#C9943A]/50 hover:shadow-[0_20px_60px_-25px_rgba(201,148,58,0.25)] transition-all duration-300">
                       {/* Info */}
                       <div className="flex flex-col justify-between">
                         <ProjectInfo project={project} align="left" />
@@ -363,25 +395,31 @@ export default function ProjectsTimeline() {
                 );
               }
 
-              // ── Standard alternating text card ──
+              // ── Standard card — full-width left-aligned on mobile, alternating on md+ ──
               const isLeft = altIndex % 2 === 0;
               altIndex++;
               return (
                 <div
                   key={project.name}
                   ref={(el) => { itemRefs.current[i] = el; }}
-                  className={`relative flex items-center ${isLeft ? "flex-row" : "flex-row-reverse"}`}
+                  className={`relative flex items-center ${
+                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                  }`}
                 >
-                  <div className={`w-[calc(50%-2rem)] ${isLeft ? "pr-6" : "pl-6"}`}>
-                    <div className="group border border-[#C9943A]/15 bg-black/40 p-5 rounded-sm hover:border-[#C9943A]/40 transition-all duration-300 hover:bg-black/60">
+                  <div
+                    className={`w-full ml-10 md:ml-0 md:w-[calc(50%-2rem)] ${
+                      isLeft ? "md:pr-6" : "md:pl-6"
+                    }`}
+                  >
+                    <div className="group border border-[#C9943A]/15 bg-black/40 p-5 rounded-sm hover:border-[#C9943A]/40 transition-all duration-300 hover:bg-black/60 hover:-translate-y-0.5">
                       <ProjectInfo project={project} align={isLeft ? "right" : "left"} />
                     </div>
                   </div>
                   {/* Dot */}
-                  <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#C9943A] bg-[#0A0A0A] z-10 flex items-center justify-center">
+                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#C9943A] bg-[#0A0A0A] z-10 flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#C9943A]" />
                   </div>
-                  <div className="w-[calc(50%-2rem)]" />
+                  <div className="hidden md:block md:w-[calc(50%-2rem)]" />
                 </div>
               );
             })}
@@ -389,14 +427,16 @@ export default function ProjectsTimeline() {
         </div>
 
         {/* Total bar */}
-        <div className="mt-20 text-center border border-[#C9943A]/20 bg-black/30 py-10 px-6 rounded-sm">
-          <p className="text-[#D4C4A8]/50 text-xs tracking-[0.3em] uppercase mb-2">
+        <div className="mt-20 relative text-center border border-[#C9943A]/20 bg-black/30 py-12 px-6 rounded-sm overflow-hidden">
+          <div className="absolute inset-x-0 top-0 hairline-gold" />
+          <p className="text-[#D4C4A8]/50 text-xs tracking-[0.3em] uppercase mb-3">
             Total Portfolio Value
           </p>
-          <p className="font-heading text-6xl text-[#C9943A]">AED 40M+</p>
-          <p className="text-[#D4C4A8]/30 text-sm mt-2">
+          <p className="font-heading text-6xl md:text-7xl text-gradient-gold">AED 40M+</p>
+          <p className="text-[#D4C4A8]/30 text-sm mt-3">
             13 landmark projects · 2021–2025
           </p>
+          <div className="absolute inset-x-0 bottom-0 hairline-gold" />
         </div>
       </div>
     </section>

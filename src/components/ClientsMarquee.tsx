@@ -74,7 +74,7 @@ function MarqueeRow({
             key={`${client}-${i}`}
             className="flex items-center gap-3 mx-4 flex-shrink-0"
           >
-            <span className="text-[#D4C4A8]/50 text-sm whitespace-nowrap font-light hover:text-[#C9943A] transition-colors duration-300 cursor-default">
+            <span className="text-[#D4C4A8]/50 text-sm md:text-base whitespace-nowrap font-light hover:text-[#C9943A] transition-colors duration-300 cursor-default">
               {client}
             </span>
             <span className="text-[#C9943A]/30 text-xs">◆</span>
@@ -122,7 +122,7 @@ export default function ClientsMarquee() {
             Trusted By
           </span>
           <h2 className="font-heading text-[clamp(3rem,7vw,6rem)] leading-none text-[#FAFAFA] mt-2">
-            45+ <span className="text-[#C9943A]">Clients</span>
+            45+ <span className="text-gradient-gold">Clients</span>
           </h2>
           <p className="mt-3 text-[#D4C4A8]/40 text-sm font-light">
             From multinationals to government entities — built on lasting partnerships
@@ -130,10 +130,10 @@ export default function ClientsMarquee() {
         </div>
       </div>
 
-      {/* Gradient edges */}
-      <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-[#080808] to-transparent" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-[#080808] to-transparent" />
+      {/* Gradient edges — hover anywhere to pause and read */}
+      <div className="relative marquee-wrap">
+        <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-[#080808] to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-[#080808] to-transparent pointer-events-none" />
 
         <div className="space-y-4">
           <MarqueeRow items={ROW1} direction="left" />
