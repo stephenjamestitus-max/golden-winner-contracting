@@ -17,64 +17,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Presigned URLs expire 1h after issue — download raw files immediately,
+      # before any slow setup steps.
+      - name: Download licensed Adobe Stock photos (raw)
+        run: |
+          set -eu
+          mkdir -p /tmp/raw
+          dl () { curl -fL --retry 3 --max-time 120 -o "/tmp/raw/$1" "$2"; echo "got $1 ($(du -h /tmp/raw/$1 | cut -f1))"; }
+          dl groundworks.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad5c8bd258cd051f709c3e85f3ca88ec4aff416da736509bace1475272e8d2bf.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_286485636.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133914Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=77f174e5a924fc2b2cca3586ac8b4000e3626781713836cc255a808f9f38d51e'
+          dl structure.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/fad1de4a42fef5d184283fb2b3f7db1b34d67925b7ddeeaa86f18b22201b33a4.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_478682195.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133915Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=7a90f818eb623dcaf0b06924f3293ffaf16ba0238d44874d989cf68aefa877be'
+          dl mep.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/07418c6f06492a4a58384429ed9d94ee911c3496e99784e806ba40cbf277d220.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_241154825.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133917Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=f942f0ec4cc4e299263b9af2995b2a49ef7c0ae680df4bb50345305130a468e8'
+          dl fitout.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/78f097e682661c6ce3455355cd432777208d4a441cbc81ffb8f6a0c5bf2845c6.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_406015857.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133918Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=8a0caecaca455d0d6b163fd77fb0ac85a42dd532276e70b487df5a23742a41ce'
+          dl finishes.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d2815ed11c350881020a232294b1cebc60ad826706c13c04aef5af46bd775a60.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_211636767.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=a6968b9c427118426e0df0786e39c9a539e37e1c8bccfd9f243c45f7ad96ba0a'
+          dl envelope.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/7d5ab45a54f91a260b20c4c356befb6fcc1246d8a7930a0b3c90514ac4c549ee.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_605906971.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133929Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=8350e01b3f4bf991b81d17968d5543d7c7ffa5c913d22b10e03a66478dd877a0'
+          dl site-team.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/9c197a56b00ed81d5f661046afafb73154a45e49c78134ae17f8971873346698.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_287493002.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133930Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=b140d407ecf0c6ae5eb94acfda7b4b2d5fcec9b3b53b8e1561927ac7b6fa3f5a'
+          dl blueprints.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d927a5510b1a2c78728fd0246a20a4259349aacdd854e77e4e55ed7d8b6a6590.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_315639262.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133932Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=98d6f5d3032bade2d211c79afbf70b09e73a68104cd2f03ba1a4d0246fba9376'
+          dl crane-sunset.jpg 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad3bca3048c7ae1468af82dc6d95e01c16bce4a7f199cca49852e5b5bfc64f4a.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_253578185.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T133933Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=e2442c7c3dde1b360fb5fb296d278de2abc5c76f891942b4945aa61ae6e026aa'
+
       - name: Install ffmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
 
-      - name: Download licensed Adobe Stock photos
+      - name: Resize into public/images
         run: |
-          set -u
+          set -eu
           mkdir -p public/images/services public/images/about public/images/contact
-
-          fetch_resize () {
-            local out="$1" width="$2" quality="$3" url="$4"
-            if curl -fL --retry 3 --max-time 120 -o /tmp/src.jpg "$url"; then
-              ffmpeg -y -loglevel error -i /tmp/src.jpg \
-                -vf "scale='min(${width},iw)':-2" -q:v "$quality" "$out"
-              echo "OK  $out ($(du -h "$out" | cut -f1))"
-            else
-              echo "FAIL $out"
-            fi
-          }
-
-          fetch_resize public/images/services/groundworks.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad5c8bd258cd051f709c3e85f3ca88ec4aff416da736509bace1475272e8d2bf.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_286485636.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092007Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=3899456f9eee4e78655ed305bf27655dc9ed3175cef0b858c70122a8bf9172a9'
-          fetch_resize public/images/services/structure.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/fad1de4a42fef5d184283fb2b3f7db1b34d67925b7ddeeaa86f18b22201b33a4.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_478682195.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092120Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=5ed571468f27df97d8220dbd619d8aa5bef1a904317df07b5a294c2da8ecd944'
-          fetch_resize public/images/services/mep.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/07418c6f06492a4a58384429ed9d94ee911c3496e99784e806ba40cbf277d220.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_241154825.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092122Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=a752fe5c4cffeb22603338c8e4edc5b5d4ffdb6de69ee94df3d2d16e78062f4f'
-          fetch_resize public/images/services/fitout.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/78f097e682661c6ce3455355cd432777208d4a441cbc81ffb8f6a0c5bf2845c6.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_406015857.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=3b48eb7c67012f66430bc2b88bcaa7bd19a3235d2997f42c415f5c21b692f987'
-          fetch_resize public/images/services/finishes.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d2815ed11c350881020a232294b1cebc60ad826706c13c04aef5af46bd775a60.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_211636767.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092124Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=8fb284c9187ff6bd91de24440e681e33f3ed06cabda90999532e1350d8826eac'
-          fetch_resize public/images/services/envelope.jpg 1600 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/7d5ab45a54f91a260b20c4c356befb6fcc1246d8a7930a0b3c90514ac4c549ee.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_605906971.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092133Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=d49bcfa027cc6f96c27b907c816378acaa7de5d05159ce6667917dca628dabd8'
-          fetch_resize public/images/about/site-team.jpg 1400 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/9c197a56b00ed81d5f661046afafb73154a45e49c78134ae17f8971873346698.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_287493002.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092135Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=4d1dfbaf128bc192bfba2132ec4e0ef6e8ee514cd936f28843d7348977970185'
-          fetch_resize public/images/about/blueprints.jpg 1200 3 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d927a5510b1a2c78728fd0246a20a4259349aacdd854e77e4e55ed7d8b6a6590.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_315639262.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092137Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=6b532166382dfe18ab7dc02c72abfcc1c06872cba08fb2f74e14922877b3b85d'
-          fetch_resize public/images/contact/crane-sunset.jpg 1920 4 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad3bca3048c7ae1468af82dc6d95e01c16bce4a7f199cca49852e5b5bfc64f4a.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_253578185.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092139Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=e2390c5cdbea367c37720d1586ab171461d060affeb1ee38af4bf1a7ef40fe36'
-
-          ls -la public/images/services public/images/about public/images/contact
-
-      - name: Try to recover original project photos from live deployment
-        run: |
-          set -u
-          BASE="https://golden-winner-contracting.vercel.app/projects"
-          mkdir -p public/projects
-          FILES="qusais_complex_page08_img01_222x279.png qusais_complex_page09_img01_230x265.png qusais_complex_page09_img02_220x275.png qusais_complex_page09_img03_222x278.png waterproofing_page14_img01_780x517.png waterproofing_page14_img02_701x507.png waterproofing_page14_img03_720x495.png waterproofing_page14_img04_646x546.png floor_coating_page15_img01_780x503.png floor_coating_page15_img02_714x468.png floor_coating_page15_img03_752x527.png floor_coating_page15_img04_645x496.png truelase_fitout_page11_img01_649x703.png truelase_fitout_page11_img02_613x623.png truelase_fitout_page11_img03_672x679.png carbon_wrapping_page13_img01_807x544.png carbon_wrapping_page13_img02_640x512.png carbon_wrapping_page13_img03_776x536.png carbon_wrapping_page13_img04_636x512.png column_jacketing_page12_img01_622x471.png column_jacketing_page12_img02_628x510.png column_jacketing_page12_img03_658x474.png column_jacketing_page12_img04_633x528.png"
-          got=0
-          for f in $FILES; do
-            if curl -fsL --max-time 30 -o "public/projects/$f" "$BASE/$f"; then
-              if file "public/projects/$f" | grep -qiE 'image|png'; then
-                got=$((got+1)); echo "OK  $f"
-              else
-                rm -f "public/projects/$f"; echo "NOT-IMAGE $f"
-              fi
-            else
-              rm -f "public/projects/$f"; echo "MISS $f"
-            fi
-          done
-          echo "Recovered $got/23 project photos"
-          rmdir public/projects 2>/dev/null || true
+          rs () { ffmpeg -y -loglevel error -i "/tmp/raw/$1" -vf "scale='min($2,iw)':-2" -q:v "$3" "$4"; echo "OK $4 ($(du -h "$4" | cut -f1))"; }
+          rs groundworks.jpg 1600 3 public/images/services/groundworks.jpg
+          rs structure.jpg 1600 3 public/images/services/structure.jpg
+          rs mep.jpg 1600 3 public/images/services/mep.jpg
+          rs fitout.jpg 1600 3 public/images/services/fitout.jpg
+          rs finishes.jpg 1600 3 public/images/services/finishes.jpg
+          rs envelope.jpg 1600 3 public/images/services/envelope.jpg
+          rs site-team.jpg 1400 3 public/images/about/site-team.jpg
+          rs blueprints.jpg 1200 3 public/images/about/blueprints.jpg
+          rs crane-sunset.jpg 1920 4 public/images/contact/crane-sunset.jpg
 
       - name: Self-host hero video (compressed)
         run: |
           set -u
           mkdir -p public/video
           if curl -fL --retry 2 --max-time 300 -o /tmp/hero_src.mp4 "https://videos.pexels.com/video-files/28823329/12513254_2560_1440_30fps.mp4"; then
-            ffmpeg -y -i /tmp/hero_src.mp4 -vf scale=1600:-2 -c:v libx264 -preset medium -crf 32 -movflags +faststart -an /tmp/hero.mp4 || true
+            ffmpeg -y -loglevel error -i /tmp/hero_src.mp4 -vf scale=1600:-2 -c:v libx264 -preset medium -crf 32 -movflags +faststart -an /tmp/hero.mp4 || true
             if [ -f /tmp/hero.mp4 ]; then
               SIZE=$(stat -c%s /tmp/hero.mp4)
               echo "Encoded hero.mp4: $SIZE bytes"
@@ -85,14 +68,24 @@ jobs:
               fi
             fi
           else
-            echo "Hero video download failed, keeping remote URL"
+            echo "Hero video download failed, keeping remote URL fallback"
           fi
           rmdir public/video 2>/dev/null || true
+
+      - name: Verify required assets exist
+        run: |
+          set -eu
+          n=$(ls public/images/services/*.jpg | wc -l)
+          echo "services images: $n"
+          test "$n" -eq 6
+          test -f public/images/about/site-team.jpg
+          test -f public/images/about/blueprints.jpg
+          test -f public/images/contact/crane-sunset.jpg
 
       - name: Commit and push assets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A public
-          git commit -m "chore: add self-hosted licensed images and media assets" || echo "Nothing to commit"
+          git commit -m "chore: add self-hosted licensed images and media assets"
           git push
