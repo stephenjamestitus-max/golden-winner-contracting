@@ -1,0 +1,89 @@
+name: Fetch self-hosted assets
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download licensed Adobe Stock photos
+        run: |
+          set -u
+          mkdir -p public/images/services public/images/about public/images/contact
+
+          fetch_resize () {
+            local out="$1" width="$2" quality="$3" url="$4"
+            if curl -fL --retry 3 --max-time 120 -o /tmp/src.jpg "$url"; then
+              convert /tmp/src.jpg -auto-orient -resize "${width}>" -strip -interlace Plane -quality "$quality" "$out"
+              echo "OK  $out ($(du -h "$out" | cut -f1))"
+            else
+              echo "FAIL $out"
+            fi
+          }
+
+          fetch_resize public/images/services/groundworks.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad5c8bd258cd051f709c3e85f3ca88ec4aff416da736509bace1475272e8d2bf.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_286485636.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092007Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=3899456f9eee4e78655ed305bf27655dc9ed3175cef0b858c70122a8bf9172a9'
+          fetch_resize public/images/services/structure.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/fad1de4a42fef5d184283fb2b3f7db1b34d67925b7ddeeaa86f18b22201b33a4.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_478682195.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092120Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=5ed571468f27df97d8220dbd619d8aa5bef1a904317df07b5a294c2da8ecd944'
+          fetch_resize public/images/services/mep.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/07418c6f06492a4a58384429ed9d94ee911c3496e99784e806ba40cbf277d220.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_241154825.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092122Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=a752fe5c4cffeb22603338c8e4edc5b5d4ffdb6de69ee94df3d2d16e78062f4f'
+          fetch_resize public/images/services/fitout.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/78f097e682661c6ce3455355cd432777208d4a441cbc81ffb8f6a0c5bf2845c6.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_406015857.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=3b48eb7c67012f66430bc2b88bcaa7bd19a3235d2997f42c415f5c21b692f987'
+          fetch_resize public/images/services/finishes.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d2815ed11c350881020a232294b1cebc60ad826706c13c04aef5af46bd775a60.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_211636767.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092124Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=8fb284c9187ff6bd91de24440e681e33f3ed06cabda90999532e1350d8826eac'
+          fetch_resize public/images/services/envelope.jpg 1600x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/7d5ab45a54f91a260b20c4c356befb6fcc1246d8a7930a0b3c90514ac4c549ee.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_605906971.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092133Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=d49bcfa027cc6f96c27b907c816378acaa7de5d05159ce6667917dca628dabd8'
+          fetch_resize public/images/about/site-team.jpg 1400x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/9c197a56b00ed81d5f661046afafb73154a45e49c78134ae17f8971873346698.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_287493002.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092135Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=4d1dfbaf128bc192bfba2132ec4e0ef6e8ee514cd936f28843d7348977970185'
+          fetch_resize public/images/about/blueprints.jpg 1200x 80 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/d927a5510b1a2c78728fd0246a20a4259349aacdd854e77e4e55ed7d8b6a6590.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_315639262.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092137Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=6b532166382dfe18ab7dc02c72abfcc1c06872cba08fb2f74e14922877b3b85d'
+          fetch_resize public/images/contact/crane-sunset.jpg 1920x 75 'https://stock-apex-images-prod-ew1.s3.eu-west-1.amazonaws.com/ad3bca3048c7ae1468af82dc6d95e01c16bce4a7f199cca49852e5b5bfc64f4a.jpg?response-content-disposition=attachment%3B%20filename%3D%22AdobeStock_253578185.jpeg%22&response-content-type=image%2Fjpeg&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAUMGGMQGERDWXM64M%2F20260611%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20260611T092139Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=e2390c5cdbea367c37720d1586ab171461d060affeb1ee38af4bf1a7ef40fe36'
+
+          ls -la public/images/services public/images/about public/images/contact
+
+      - name: Try to recover original project photos from live deployment
+        run: |
+          set -u
+          BASE="https://golden-winner-contracting.vercel.app/projects"
+          mkdir -p public/projects
+          FILES="qusais_complex_page08_img01_222x279.png qusais_complex_page09_img01_230x265.png qusais_complex_page09_img02_220x275.png qusais_complex_page09_img03_222x278.png waterproofing_page14_img01_780x517.png waterproofing_page14_img02_701x507.png waterproofing_page14_img03_720x495.png waterproofing_page14_img04_646x546.png floor_coating_page15_img01_780x503.png floor_coating_page15_img02_714x468.png floor_coating_page15_img03_752x527.png floor_coating_page15_img04_645x496.png truelase_fitout_page11_img01_649x703.png truelase_fitout_page11_img02_613x623.png truelase_fitout_page11_img03_672x679.png carbon_wrapping_page13_img01_807x544.png carbon_wrapping_page13_img02_640x512.png carbon_wrapping_page13_img03_776x536.png carbon_wrapping_page13_img04_636x512.png column_jacketing_page12_img01_622x471.png column_jacketing_page12_img02_628x510.png column_jacketing_page12_img03_658x474.png column_jacketing_page12_img04_633x528.png"
+          got=0
+          for f in $FILES; do
+            if curl -fsL --max-time 30 -o "public/projects/$f" "$BASE/$f"; then
+              if file "public/projects/$f" | grep -qiE 'image|png'; then
+                got=$((got+1)); echo "OK  $f"
+              else
+                rm -f "public/projects/$f"; echo "NOT-IMAGE $f"
+              fi
+            else
+              rm -f "public/projects/$f"; echo "MISS $f"
+            fi
+          done
+          echo "Recovered $got/23 project photos"
+          rmdir public/projects 2>/dev/null || true
+
+      - name: Self-host hero video (compressed)
+        run: |
+          set -u
+          mkdir -p public/video
+          if curl -fL --retry 2 --max-time 300 -o /tmp/hero_src.mp4 "https://videos.pexels.com/video-files/28823329/12513254_2560_1440_30fps.mp4"; then
+            ffmpeg -y -i /tmp/hero_src.mp4 -vf scale=1600:-2 -c:v libx264 -preset medium -crf 32 -movflags +faststart -an /tmp/hero.mp4 || true
+            if [ -f /tmp/hero.mp4 ]; then
+              SIZE=$(stat -c%s /tmp/hero.mp4)
+              echo "Encoded hero.mp4: $SIZE bytes"
+              if [ "$SIZE" -lt 45000000 ]; then
+                mv /tmp/hero.mp4 public/video/hero.mp4
+              else
+                echo "Too large, skipping self-hosted video"
+              fi
+            fi
+          else
+            echo "Hero video download failed, keeping remote URL"
+          fi
+          rmdir public/video 2>/dev/null || true
+
+      - name: Commit and push assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public
+          git commit -m "chore: add self-hosted licensed images and media assets" || echo "Nothing to commit"
+          git push
